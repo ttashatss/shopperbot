@@ -47,6 +47,17 @@ const replyText = (replyToken, text, quoteToken) => {
   });
 };
 
+// send message function
+const pushText = (userId, text) => {
+  return client.pushMessage({
+    to: userId, 
+    messages : [{
+      type: 'text',
+      text, 
+    }]
+  })
+}
+
 // callback function to handle a single event
 function handleEvent(event) {
   switch (event.type) {
@@ -54,7 +65,8 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return handleText(message, event.replyToken);
+          //return handleText(message, event.replyToken);
+          return pushText(event.source.userId, message.text)
         case 'image':
           return handleImage(message, event.replyToken);
         case 'video':
