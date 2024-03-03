@@ -4,13 +4,12 @@ import line from "@line/bot-sdk";
 import express from "express";
 import dotenv from "dotenv";
 
-// import functions from utils
-import pushText from "./utils/pushText.js";
-import replyText from "./utils/replyText.js";
-import getUserName from "./utils/getUserName.js";
-
 // import handler functions
 import handleFollow from "./handler/handleFollow.js";
+import handleMenuPrg from "./handler/handleMenuPrg.js";
+import handleMenuAsk from "./handler/handleMenuAsk.js";
+import handleMsgType from "./handler/handleMsgType.js";
+import handleError from "./handler/handleError.js";
 
 dotenv.config();
 
@@ -47,50 +46,56 @@ app.post("/webhook", line.middleware(config), (req, res) => {
 
 // callback function to handle a single event
 function handleEvent(event) {
+  const cat = config.channelAccessToken;
+  const userId = event.source.userId;
   switch (event.type) {
     case "message":
       const message = event.message;
-      switch (message.type) {
-        case "text":
-          // getUser(event.source.userId, config.channelAccessToken)
-          //return handleText(message, event.replyToken);
-          return pushText(client, event.source.userId, message.text);
-        case "image":
-          return handleImage(message, event.replyToken);
-        case "video":
-          return handleVideo(message, event.replyToken);
-        case "audio":
-          return handleAudio(message, event.replyToken);
-        case "location":
-          return handleLocation(message, event.replyToken);
-        case "sticker":
-          return handleSticker(message, event.replyToken);
+
+      if (message.type !== "text") {
+        Promise.resolve("ok");
+        return handleMsgType(client, userId);
+      }
+
+      let triggerMsg = event.message.text.toUpperCase();
+      switch (triggerMsg) {
+        case "ABOUT SIAM PARAGON":
+          return handleMenuPrg(userId, cat);
+
+        case "GOT A QUESTION":
+          return handleMenuAsk(client, userId);
+
+        case "CUSTOMIZE SHOPPERBOT":
+          // to do survey for next semester
+          return handleError(client, userId);
+          
         default:
-          throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+          // to connect to LLM
+          return console.log(triggerMsg);
       }
 
     case "follow":
-      return handleFollow(client, event.source.userId, config.channelAccessToken)
-      // return pushText(client, event.source.userId, "hello");
+      return handleFollow(client, userId, cat);
 
     case "unfollow":
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
     case "join":
-      return replyText(event.replyToken, `Joined ${event.source.type}`);
+      return console.log(event.replyToken, `Joined ${event.source.type}`);
 
     case "leave":
       return console.log(`Left: ${JSON.stringify(event)}`);
 
     case "postback":
       let data = event.postback.data;
-      return replyText(event.replyToken, `Got postback: ${data}`);
+      return console.log(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
+      // to connect to Beacon -> handleBeacon()
       const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString(
         "utf8"
       )}`;
-      return replyText(
+      return console.log(
         event.replyToken,
         `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`
       );
@@ -100,31 +105,8 @@ function handleEvent(event) {
   }
 }
 
-function handleText(message, replyToken) {
-  return replyText(replyToken, message.text, message.quoteToken);
-}
-
-function handleImage(message, replyToken) {
-  return replyText(replyToken, "Got Image");
-}
-
-function handleVideo(message, replyToken) {
-  return replyText(replyToken, "Got Video");
-}
-
-function handleAudio(message, replyToken) {
-  return replyText(replyToken, "Got Audio");
-}
-
-function handleLocation(message, replyToken) {
-  return replyText(replyToken, "Got Location");
-}
-
-function handleSticker(message, replyToken) {
-  return replyText(replyToken, "Got Sticker");
-}
-
 const port = config.port;
+
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
