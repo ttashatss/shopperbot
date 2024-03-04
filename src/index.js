@@ -4,6 +4,7 @@ import line from "@line/bot-sdk";
 import express from "express";
 import dotenv from "dotenv";
 
+import pushText from "./utils/pushText.js";
 // import handler functions
 import handleFollow from "./handler/handleFollow.js";
 import handleMenuPrg from "./handler/handleMenuPrg.js";
@@ -95,10 +96,12 @@ function handleEvent(event) {
       const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString(
         "utf8"
       )}`;
-      return console.log(
+      console.log(
         event.replyToken,
         `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`
       );
+      return pushText(client, userId, `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`);
+        
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
