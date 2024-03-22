@@ -11,6 +11,7 @@ import handleMenuPrg from "./handler/handleMenuPrg.js";
 import handleMenuAsk from "./handler/handleMenuAsk.js";
 import handleMsgType from "./handler/handleMsgType.js";
 import handleError from "./handler/handleError.js";
+import handleBeacon from "./handler/handleBeacon.js"
 
 dotenv.config();
 
@@ -69,7 +70,7 @@ function handleEvent(event) {
         case "CUSTOMIZE SHOPPERBOT":
           // to do survey for next semester
           return handleError(client, userId);
-          
+
         default:
           // to connect to LLM
           return console.log(triggerMsg);
@@ -92,16 +93,7 @@ function handleEvent(event) {
       return console.log(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
-      // to connect to Beacon -> handleBeacon()
-      const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString(
-        "utf8"
-      )}`;
-      console.log(
-        event.replyToken,
-        `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`
-      );
-      return pushText(client, userId, `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`);
-        
+      return handleBeacon(client, userId, event);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
