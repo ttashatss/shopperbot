@@ -28,3 +28,14 @@ Department Store Recommendation System with Location-Based Chatbot Integration u
     CHANNEL_ACCESS_TOKEN=your_access_token_here
     CHANNEL_SECRET=your_channel_secret_here
 
+4. To start the bot,  run:
+
+   ```bash
+   npm start
+
+5. On terminal, run:
+
+   ```bash
+   ngrok http http://localhost:3000
+
+6. Copy the forwarding target to LINE Developer Console Webhook URL and add '/webhook' 
