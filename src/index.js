@@ -4,7 +4,6 @@ import line from "@line/bot-sdk";
 import express from "express";
 import dotenv from "dotenv";
 
-import pushText from "./utils/pushText.js";
 // import handler functions
 import handleFollow from "./handler/handleFollow.js";
 import handleMenuPrg from "./handler/handleMenuPrg.js";
@@ -70,6 +69,9 @@ function handleEvent(event) {
         case "CUSTOMIZE SHOPPERBOT":
           // to do survey for next semester
           return handleError(client, userId);
+
+        // case "YO":
+        //   return handleBeacon(client, userId, event);
 
         default:
           // to connect to LLM
