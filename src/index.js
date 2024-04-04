@@ -10,7 +10,8 @@ import handleMenuPrg from "./handler/handleMenuPrg.js";
 import handleMenuAsk from "./handler/handleMenuAsk.js";
 import handleMsgType from "./handler/handleMsgType.js";
 import handleError from "./handler/handleError.js";
-import handleBeacon from "./handler/handleBeacon.js"
+import handleBeacon from "./handler/handleBeacon.js";
+import handleMsg from "./handler/handleMsg.js";
 
 dotenv.config();
 
@@ -75,7 +76,7 @@ function handleEvent(event) {
 
         default:
           // to connect to LLM
-          return console.log(triggerMsg);
+          return handleMsg(client, userId, event);
       }
 
     case "follow":
