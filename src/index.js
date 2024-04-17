@@ -23,8 +23,15 @@ const config = {
 
 // create LINE SDK client
 const client = new line.messagingApi.MessagingApiClient(config);
-
 const app = express();
+
+// Create an array to store user data - get user info and user location from database
+var userData = [];
+const beaconData = [
+  ["017825b219", "A"],
+  ["01790c7bf3", "B"],
+  ["01790f9cea", "C"],
+];
 
 // webhook callback
 app.post("/webhook", line.middleware(config), (req, res) => {
@@ -76,7 +83,7 @@ function handleEvent(event) {
 
         default:
           // to connect to LLM
-          return handleMsg(client, userId, event);
+          return handleMsg(client, userId, event, userData, beaconData);
       }
 
     case "follow":
@@ -96,7 +103,7 @@ function handleEvent(event) {
       return console.log(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
-      return handleBeacon(client, userId, event);
+      return handleBeacon(client, userId, event, userData);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);

@@ -2,16 +2,58 @@
 
 import pushText from "../utils/pushText.js";
 
-const handleMsg = (client, userId, event) => {
+const handleMsg = (client, userId, event, userData, beaconData) => {
   const msg = event.message.text;
-  // get user info and user location from database
+  var hwid = 0;
+  var store = "not found";
 
-  // parse information to LLM using API
+  // Get user information
+  const idIndex = userData.findIndex((element) => element[0] == userId);
+  if (idIndex !== -1) {
+    hwid = userData[idIndex][1][0];
+  }
 
-  // receive answer from API
+  // Get store information
+  const beaconIndex = beaconData.findIndex((element) => element[0] == hwid);
+  if (beaconIndex !== -1) {
+    store = beaconData[beaconIndex][1];
+  }
+
+  // Parse information to LLM using API
+
+  const apibody = {
+    userId: userId,
+    userInfo: "userInfo", // To get from database - text from questionnaires
+    prompt: msg,
+    location: store, // To get from database - latest beacon information
+  };
+
+  const apiurl = "http://127.0.0.1:6060"; // chage API endpoint
+  // Make a request to the API endpoint
+  fetch(apiurl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(apibody),
+  })
+    .then((response) => {
+      // Check if response is successful
+      if (!response.ok) {
+        throw new Error("Problem with network response");
+      }
+      // Parse JSON response
+      return response.json();
+    })
+    .then((data) => {
+      // Do something with the data
+      console.log(data);
+      pushText(client, userId, data);
+    })
+    .catch((error) => {
+      console.error("Problem with fetch operations: ", error);
+    });
   
-  pushText(client, userId, msg);
 };
 
 export default handleMsg;
-

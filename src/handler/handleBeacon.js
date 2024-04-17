@@ -3,14 +3,13 @@
 import pushText from "../utils/pushText.js";
 import formatDate from "../utils/formatDate.js";
 
-var userData = [];
 var lastResetDate = new Date(); // Initialize with the current date
 
 // for testing
 // const hwid = 123456;
 // const text = "wassupgurl";
 
-const handleBeacon = (client, userId, event) => {
+const handleBeacon = (client, userId, event, userData) => {
   // Beacon specific variables
   const hwid = event.beacon.hwid;
   const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString("utf8")}`;
@@ -34,7 +33,6 @@ const handleBeacon = (client, userId, event) => {
   } else {
     userData[idIndex][1].unshift(hwid);
     console.log(userData);
-    return;
   }
 };
 
