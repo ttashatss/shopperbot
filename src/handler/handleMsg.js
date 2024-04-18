@@ -28,7 +28,7 @@ const handleMsg = (client, userId, event, userData, beaconData) => {
     location: store, // To get from database - latest beacon information
   };
 
-  const apiurl = "http://127.0.0.1:6060"; // chage API endpoint
+  const apiurl = "http://127.0.0.1:6060";
   // Make a request to the API endpoint
   fetch(apiurl, {
     method: "POST",
@@ -42,11 +42,10 @@ const handleMsg = (client, userId, event, userData, beaconData) => {
       if (!response.ok) {
         throw new Error("Problem with network response");
       }
-      // Parse JSON response
       return response.json();
     })
     .then((data) => {
-      // Do something with the data
+      // Send answer back to client
       console.log(data);
       pushText(client, userId, data);
     })

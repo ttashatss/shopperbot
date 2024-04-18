@@ -12,6 +12,7 @@ import handleMsgType from "./handler/handleMsgType.js";
 import handleError from "./handler/handleError.js";
 import handleBeacon from "./handler/handleBeacon.js";
 import handleMsg from "./handler/handleMsg.js";
+import handleTestBeacon from "./handler/handleTestBeacon.js";
 
 dotenv.config();
 
@@ -103,7 +104,8 @@ function handleEvent(event) {
       return console.log(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
-      return handleBeacon(client, userId, event, userData);
+      // return handleBeacon(client, userId, event, userData);
+      return handleTestBeacon(client, userId, event, userData);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
