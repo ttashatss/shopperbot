@@ -21,7 +21,7 @@ const handleMenuPrg = async (userId, cat) => {
               type: "image_carousel",
               columns: [
                 {
-                  imageUrl: "https://lh3.googleusercontent.com/drive-viewer/AKGpihYBL4AEbDm2ZWdhZVE737zuA7g9i-nxAMXUUo-xE-a1nCNT_De-QD_-e7AI2CW__G0b9xJSYbDcLJIlYnyoDxxNkETy=s1600",
+                  imageUrl: "https://drive.usercontent.google.com/download?id=1T9tadg1Dy5MdOfqysGU9UgLdBkXvC7gi&authuser=1",
                   action: {
                     type: "message",
                     label: "Ask more",
@@ -29,7 +29,7 @@ const handleMenuPrg = async (userId, cat) => {
                   },
                 },
                 {
-                  imageUrl: "https://lh3.googleusercontent.com/drive-viewer/AKGpihbKN6m7KQqwRQKbV2kt4SuvOpX-HYnJ0UOsv_Sfglz5d64hUXfCES0B0ohd6nyvD0Ebo8O40wYZmIUf_8X8VvVGvWoGeA=s1600",
+                  imageUrl: "https://drive.usercontent.google.com/download?id=1AWiCn1B2kuBMF9HH_T8a4PgqCztjry-T&authuser=1",
                   action: {
                     type: "uri",
                     label: "Learn more",
@@ -37,7 +37,7 @@ const handleMenuPrg = async (userId, cat) => {
                   },
                 },
                 {
-                  imageUrl: "https://lh3.googleusercontent.com/drive-viewer/AKGpiha49w4MUq5igxdFekqQQypGbbQk385tAl_DDGI46kb6BKOy25OOn86qrx1O7-PxOjyLEIcVuO77Qre6tSPvJYZiAjkwPQ=s1600",
+                  imageUrl: "https://drive.usercontent.google.com/download?id=1RiIHZuottIhe7dgsYq1VXUJ3ANCo23VH&authuser=1",
                   action: {
                     type: "uri",
                     label: "Learn more",

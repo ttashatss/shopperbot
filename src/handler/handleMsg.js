@@ -25,10 +25,10 @@ const handleMsg = (client, userId, event, userData, beaconData) => {
     userId: userId,
     userInfo: "userInfo", // To get from database - text from questionnaires
     prompt: msg,
-    location: store, // To get from database - latest beacon information
+    location: "store A", // To get from database - latest beacon information
   };
 
-  const apiurl = "http://127.0.0.1:6060";
+  const apiurl = "http://127.0.0.1:8000";
   // Make a request to the API endpoint
   fetch(apiurl, {
     method: "POST",
