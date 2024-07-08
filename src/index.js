@@ -13,6 +13,7 @@ import handleError from "./handler/handleError.js";
 import handleBeacon from "./handler/handleBeacon.js";
 import handleMsg from "./handler/handleMsg.js";
 import handleTestBeacon from "./handler/handleTestBeacon.js";
+import getCustomizedInfo from "./utils/getCustomizedInfo.js";
 
 dotenv.config();
 
@@ -79,8 +80,8 @@ function handleEvent(event) {
           // to do survey for next semester
           return handleError(client, userId);
 
-        // case "YO":
-        //   return handleBeacon(client, userId, event);
+        case "YO":
+          return getCustomizedInfo(userId);
 
         default:
           // to connect to LLM
