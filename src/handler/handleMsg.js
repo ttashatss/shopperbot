@@ -2,37 +2,29 @@
 
 import pushText from "../utils/pushText.js";
 import getCustomizedInfo from "../utils/getCustomizedInfo.js";
+import findLastStore from "../utils/findLastStore.js";
 
-const handleMsg =  async (client, userId, event, userData, beaconData) => {
+const handleMsg =  async (client, userId, event) => {
   var hwid = 0;
   var store = "not found";
 
   const userInfo = await getCustomizedInfo(userId);
-  console.log(userInfo)
   const userInfoText = `My age is ${userInfo.age}, I speak ${userInfo.language}, I am interested in ${userInfo.interest}, I shop ${userInfo.frequency}, and I have other comments: ${userInfo.other}`
 
-  const msg = `this is my information, ${userInfoText}, I want to know: ${event.message.text}`;
-  
-  // // Get user information
-  // const idIndex = userData.findIndex((element) => element[0] == userId);
-  // if (idIndex !== -1) {
-  //   hwid = userData[idIndex][1][0];
-  // }
+  const msg = event.message.text
 
-  // // Get store information
-  // const beaconIndex = beaconData.findIndex((element) => element[0] == hwid);
-  // if (beaconIndex !== -1) {
-  //   store = beaconData[beaconIndex][1];
-  // }
+  const userStore = await findLastStore(userId);
+  const storeName = userStore[0].shop_name;
 
-  // Parse information to LLM using API
-
+  // Parse information to LLM Module
   const apibody = {
     userId: userId,
     userInfo: userInfoText, // To get from database - text from questionnaires
     prompt: msg,
-    location: "store A", // To get from database - latest beacon information
+    location: storeName, // To get from database - latest beacon information
   };
+
+  console.log(apibody)
 
   const apiurl = "http://127.0.0.1:8000";
   // Make a request to the API endpoint

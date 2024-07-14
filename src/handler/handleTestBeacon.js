@@ -12,6 +12,7 @@ const handleBeacon = (client, userId, event, userData) => {
   const text = `${dm}`;
   // const text = "Visit Saboten with our special deals for today - 20% off all menus!"
 
+
   pushText(client, userId, text);
 };
 

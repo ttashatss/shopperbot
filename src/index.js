@@ -14,6 +14,8 @@ import handleBeacon from "./handler/handleBeacon.js";
 import handleMsg from "./handler/handleMsg.js";
 import handleTestBeacon from "./handler/handleTestBeacon.js";
 import getCustomizedInfo from "./utils/getCustomizedInfo.js";
+import findLastStore from "./utils/findLastStore.js";
+import updateUserStore from "./utils/updateUserStore.js";
 
 dotenv.config();
 
@@ -26,14 +28,6 @@ const config = {
 // create LINE SDK client
 const client = new line.messagingApi.MessagingApiClient(config);
 const app = express();
-
-// Create an array to store user data - get user info and user location from database
-var userData = [];
-const beaconData = [
-  ["017825b219", "A"],
-  ["01790c7bf3", "B"],
-  ["01790f9cea", "C"],
-];
 
 // webhook callback
 app.post("/webhook", line.middleware(config), (req, res) => {
@@ -81,11 +75,18 @@ function handleEvent(event) {
           return handleError(client, userId);
 
         case "YO":
-          return getCustomizedInfo(userId);
+          return findLastStore(userId);
+
+        case "YE":
+          return updateUserStore(userId);
+
+        case "TE":
+          return handleBeacon(client, userId, event);
+
 
         default:
           // to connect to LLM
-          return handleMsg(client, userId, event, userData, beaconData);
+          return handleMsg(client, userId, event);
       }
 
     case "follow":
@@ -106,7 +107,7 @@ function handleEvent(event) {
 
     case "beacon":
       // return handleBeacon(client, userId, event, userData);
-      return handleTestBeacon(client, userId, event, userData);
+      return handleBeacon(client, userId, event);
 
     default:
       throw new Error(`Unknown event: ${JSON.stringify(event)}`);
