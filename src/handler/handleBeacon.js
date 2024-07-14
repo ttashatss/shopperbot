@@ -2,39 +2,35 @@
 
 import pushText from "../utils/pushText.js";
 import formatDate from "../utils/formatDate.js";
+import updateUserStore from "../utils/updateUserStore.js";
+import findMatchStore from "../utils/findMatchStore.js";
 
-var userData = [];
-var lastResetDate = new Date(); // Initialize with the current date
 
 // for testing
 // const hwid = 123456;
 // const text = "wassupgurl";
 
-const handleBeacon = (client, userId, event) => {
+const handleBeacon = async (client, userId, event) => {
   // Beacon specific variables
   const hwid = event.beacon.hwid;
-  const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString("utf8")}`;
-  const text = `${dm}`;
+  // const dm = `${Buffer.from(event.beacon.dm || "", "hex").toString("utf8")}`;
+  // const text = `${dm}`;
 
   const timestamp = event.timestamp;
   const date = formatDate(timestamp)[0];
+  const time = formatDate(timestamp)[1];
 
-  // Reset if current date is different from lastResetDate
-  if (date !== formatDate(lastResetDate)[0]) {
-    userData = [];
-    lastResetDate = new Date();
-    console.log("userData is reset");
-  }
+  const  stores = await updateUserStore(userId, hwid, date, time);
+  console.log(stores)
 
-  const idIndex = userData.findIndex((element) => element[0] == userId);
-  if (idIndex == -1) {
-    userData.push([userId, [hwid]]);
-    console.log(userData);
-    return pushText(client, userId, text);
+  const shop_name = stores[0].shop_name
+  console.log(shop_name)
+  const storeNotMatch = findMatchStore(stores, shop_name);
+
+  if (storeNotMatch) {
+    pushText(client, userId, stores[0].ads_message);
   } else {
-    userData[idIndex][1].unshift(hwid);
-    console.log(userData);
-    return;
+    console.log("No send")
   }
 };
 

@@ -10,7 +10,12 @@ import handleMenuPrg from "./handler/handleMenuPrg.js";
 import handleMenuAsk from "./handler/handleMenuAsk.js";
 import handleMsgType from "./handler/handleMsgType.js";
 import handleError from "./handler/handleError.js";
-import handleBeacon from "./handler/handleBeacon.js"
+import handleBeacon from "./handler/handleBeacon.js";
+import handleMsg from "./handler/handleMsg.js";
+import handleTestBeacon from "./handler/handleTestBeacon.js";
+import getCustomizedInfo from "./utils/getCustomizedInfo.js";
+import findLastStore from "./utils/findLastStore.js";
+import updateUserStore from "./utils/updateUserStore.js";
 
 dotenv.config();
 
@@ -22,7 +27,6 @@ const config = {
 
 // create LINE SDK client
 const client = new line.messagingApi.MessagingApiClient(config);
-
 const app = express();
 
 // webhook callback
@@ -70,12 +74,19 @@ function handleEvent(event) {
           // to do survey for next semester
           return handleError(client, userId);
 
-        // case "YO":
-        //   return handleBeacon(client, userId, event);
+        case "YO":
+          return findLastStore(userId);
+
+        case "YE":
+          return updateUserStore(userId);
+
+        case "TE":
+          return handleBeacon(client, userId, event);
+
 
         default:
           // to connect to LLM
-          return console.log(triggerMsg);
+          return handleMsg(client, userId, event);
       }
 
     case "follow":
@@ -95,6 +106,7 @@ function handleEvent(event) {
       return console.log(event.replyToken, `Got postback: ${data}`);
 
     case "beacon":
+      // return handleBeacon(client, userId, event, userData);
       return handleBeacon(client, userId, event);
 
     default:

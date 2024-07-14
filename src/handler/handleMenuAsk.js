@@ -16,9 +16,9 @@ const handleMenuAsk = async (client, userId) => {
               {
                 type: "action",
                 action: {
-                  type: "message",
+                  type: "uri",
                   label: "Customize ShopperBot",
-                  text: "Customize ShopperBot",
+                  uri: "https://liff.line.me/2005697708-Pgw3LgeA",
                 },
               },
               {
